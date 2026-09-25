@@ -289,20 +289,41 @@
     f.onsubmit = e => { e.preventDefault(); const v = q.value.trim(); const r = search(v, filters()); sug.classList.remove('show'); if (!v && !Object.values(filters()).some(Boolean)) { q.focus(); return; } if (!r.length) return noMatchModal(v || 'your selection'); if (r.length === 1) return productModal(r[0]); resultsModal(r, v || 'your selection', resultsUrl()); };
     $('#f-source').onclick = () => { location.href = resultsUrl() + (resultsUrl().includes('?') ? '&' : '?') + 'source=1'; };
     document.addEventListener('keydown', e => { if (e.key === '/' && document.activeElement !== q && !/input|textarea|select/i.test(document.activeElement.tagName)) { e.preventDefault(); openFinder(); } });
-    const hero = $('.hero');
-    function openFinder(instant) {
-      if (hero.classList.contains('is-open')) { q.focus(); return; }
-      hero.classList.add('is-open'); f.classList.add('open');
-      const settle = () => { f.classList.add('settled'); q.focus({ preventScroll: true }); };
-      if (instant) settle(); else setTimeout(settle, 700);
+    const hero = $('.hero'); const video = $('#hero-video'); let seqStarted = false, finderShown = false;
+    const showFinder = () => {
+      if (finderShown) return; finderShown = true;
+      hero.classList.add('is-open', 'ended'); f.classList.add('open');
+      setTimeout(() => { f.classList.add('settled'); q.focus({ preventScroll: true }); }, 900);
+      unlock();
+    };
+    const lock = () => { if (!finderShown) document.body.classList.add('hero-lock'); };
+    const unlock = () => document.body.classList.remove('hero-lock');
+    const jumpToEnd = () => { if (video) { try { video.pause(); if (video.duration) video.currentTime = video.duration; } catch (e) { } } hero.classList.add('ended'); };
+    function startSequence() {
+      if (seqStarted) return; seqStarted = true;
+      hero.classList.add('playing');
+      if (!video || matchMedia('(prefers-reduced-motion: reduce)').matches) { jumpToEnd(); setTimeout(showFinder, 500); return; }
+      let done = false; const finish = () => { if (done) return; done = true; hero.classList.add('ended'); showFinder(); };
+      video.addEventListener('ended', finish, { once: true });
+      video.addEventListener('timeupdate', () => { if (video.duration && video.currentTime >= video.duration - 0.08) finish(); });
+      video.playbackRate = 1.75;
+      const pr = video.play(); if (pr && pr.catch) pr.catch(() => { jumpToEnd(); finish(); });
+      setTimeout(finish, 4500); // safety
     }
-    $('#hero-open').onclick = () => openFinder();
+    function openFinder(instant) {
+      if (finderShown) { q.focus(); return; }
+      if (instant) { seqStarted = true; hero.classList.add('playing'); jumpToEnd(); showFinder(); return; }
+      startSequence();
+    }
+    $('#hero-open').onclick = () => startSequence();
     window.openFinder = openFinder;
+    if (video) { video.loop = false; video.addEventListener('loadedmetadata', () => { try { video.currentTime = 0; } catch (e) { } }); }
+    // lock the page until the visitor presses search or tries to scroll; the first scroll runs the sequence
+    lock();
+    const onIntent = e => { if (finderShown) return; if (e.type === 'keydown' && !['ArrowDown', 'PageDown', ' ', 'Enter'].includes(e.key)) return; if (e.cancelable) e.preventDefault(); startSequence(); };
+    window.addEventListener('wheel', onIntent, { passive: false }); window.addEventListener('touchmove', onIntent, { passive: false }); window.addEventListener('keydown', onIntent);
     if (location.hash === '#finder' || params.get('q')) openFinder(true);
-    window.addEventListener('hashchange', () => { if (location.hash === '#finder') openFinder(); });
-    // subtle parallax on the hero photo
-    const bg = $('.hero-bg img');
-    if (bg && matchMedia('(prefers-reduced-motion: no-preference)').matches) window.addEventListener('scroll', () => { const y = Math.min(scrollY, 900); bg.style.transform = `translateY(${y * .18}px) scale(${1 + y * .00008})`; }, { passive: true });
+    window.addEventListener('hashchange', () => { if (location.hash === '#finder') openFinder(true); });
   }
   /* ---------- Count-up for stats ---------- */
   function countUp() {
@@ -509,7 +530,9 @@
   function preloader() {
     const pl = $('#preloader'); if (!pl) return; const start = Date.now(); const min = sessionStorage.getItem('densbe_seen') ? 350 : 1100;
     const done = () => { setTimeout(() => { pl.classList.add('done'); markLoaded(); document.body.classList.remove('no-scroll'); try { sessionStorage.setItem('densbe_seen', '1'); } catch (e) { } setTimeout(() => pl.remove(), 700); }, Math.max(0, min - (Date.now() - start))); };
-    if (document.readyState === 'complete') done(); else { window.addEventListener('load', done); setTimeout(done, 4000); }
+    const v = $('#hero-video'); const ready = () => (v && v.readyState < 3) ? new Promise(r => { v.addEventListener('canplaythrough', r, { once: true }); v.addEventListener('error', r, { once: true }); setTimeout(r, 3500); }) : Promise.resolve();
+    const go = () => ready().then(done);
+    if (document.readyState === 'complete') go(); else { window.addEventListener('load', go); setTimeout(go, 5000); }
   }
   function markLoaded() { requestAnimationFrame(() => document.body.classList.add('loaded')); }
 

@@ -8,23 +8,28 @@
 <link rel="icon" type="image/png" href="favicon.png"><link rel="apple-touch-icon" href="assets/site/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=202609241657">
+<link rel="stylesheet" href="style.css?v=202609251910">
 </head>
 <body>
 <div id="preloader"><img class="pl-logo" src="assets/site/logo.png" alt=""><div class="pl-bar"><i></i></div><div class="pl-txt">Densbe Electrical · Since 1983</div></div>
 <div id="site-header"></div>
 
-<section class="hero" id="finder">
-  <div class="hero-bg"><img src="assets/site/hero-bg.jpg" alt="" onerror="this.remove()"></div>
-  <div class="hero-grid"></div>
+<section class="hero video-hero" id="finder">
+  <div class="hero-bg">
+    <video id="hero-video" muted playsinline preload="auto" poster="assets/site/hero-poster.jpg"><source src="assets/site/hero.mp4" type="video/mp4"></video>
+    <img class="hero-endframe" src="assets/site/hero-end.jpg" alt="">
+  </div>
+  <div class="hero-vignette"></div>
   <div class="container">
     <div class="hero-intro">
+      <img class="hero-logo" src="assets/site/logo.png" alt="Densbe Electrical">
       <h1>Find the right component</h1>
       <p class="sub">Search thousands of electrical parts, or let Densbe source it for you.</p>
       <button type="button" class="btn btn-red btn-hero" id="hero-open">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         Search for item
       </button>
+      <div class="hero-hint"><i></i>Press search or scroll to enter</div>
     </div>
     <form class="finder" id="finder-form" autocomplete="off">
       <div class="finder-title"><h2>Find the right component</h2><p>Search thousands of electrical parts, or let Densbe source it for you.</p></div>
@@ -118,6 +123,6 @@
 
 <div id="site-footer"></div>
 <script src="data.js?v=202609241626"></script>
-<script src="main.js?v=202609241642"></script>
+<script src="main.js?v=202609251911"></script>
 </body>
 </html>
