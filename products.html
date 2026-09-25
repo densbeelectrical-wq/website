@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="favicon.png"><link rel="apple-touch-icon" href="assets/site/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=202609241657">
+<title>Products | Densbe Electrical</title>
+<meta name="description" content="Browse the Densbe Electrical catalogue: explosion proof lighting, LED lighting, industrial plugs and sockets, circuit breakers, cables, fans, special lamps and E-Store brands.">
+</head>
+<body>
+<div id="site-header"></div>
+<section class="page-hero catalog-hero"><div class="container">
+  <div class="crumbs" style="justify-content:center"><a href="index.html">Home</a><span>Products</span></div>
+  <h1 id="c-title">All products</h1><p id="c-sub">Search thousands of electrical parts, or let Densbe source it for you.</p>
+  <form class="big-search" id="c-form">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="c-q" type="search" placeholder="Search by model, part number or product name" aria-label="Search products">
+    <button type="submit" class="btn btn-red">Search</button>
+  </form>
+</div></section>
+<section class="section-tight"><div class="container catalog">
+  <aside class="filters" id="filters">
+    <div class="fclose"><button aria-label="Close filters">×</button></div>
+    <div class="fbox"><h4>Categories <button type="button" id="c-reset">Reset all</button></h4><div class="flist" id="c-cats"></div></div>
+    <div class="fbox"><h4>Brand</h4><select id="c-brand"></select></div>
+    <div class="fbox"><h4>Application</h4><select id="c-app"></select></div>
+    <div class="fbox"><h4>Technical requirement</h4><select id="c-tech"></select></div>
+    <div class="fbox" style="background:var(--navy);color:#fff;border:0"><h4 style="color:#fff">Can't find it?</h4><p style="font-size:14px;color:rgba(255,255,255,.7);margin-bottom:12px">Send us the part number or a photo and we will source it.</p><a class="btn btn-red btn-sm btn-block" href="contact.html#identify">Ask Densbe <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+  </aside>
+  <div>
+    <div class="toolbar"><div class="count" id="c-count"></div><div style="display:flex;gap:10px;align-items:center"><button class="btn btn-ghost btn-sm filters-toggle" id="filters-toggle">Filters</button><select id="c-sort" aria-label="Sort"><option value="rel">Sort: Relevance</option><option value="az">Name A – Z</option><option value="za">Name Z – A</option></select></div></div>
+    <div class="chips" id="c-chips"></div>
+    <div class="prod-grid" id="cat-grid"></div>
+    <div class="load-more" id="c-more" style="display:none"><button class="btn btn-ghost">Load more products</button></div>
+  </div>
+</div></section>
+<div id="site-footer"></div>
+<script src="data.js?v=202609241626"></script>
+<script src="main.js?v=202609241642"></script>
+</body>
+</html>
